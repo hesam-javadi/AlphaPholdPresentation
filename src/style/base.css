@@ -1,0 +1,76 @@
+/* Foundation: fonts, reset, and the 1920×1080 design unit.
+   1rem equals 10 design pixels of a 1920×1080 frame, so every size scales with the projector. */
+
+@import '@fontsource-variable/vazirmatn';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: min(calc(100vw / 192), calc(100vh / 108));
+  -webkit-text-size-adjust: 100%;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Vazirmatn Variable', Vazirmatn, Tahoma, sans-serif;
+  font-size: 4rem;
+  line-height: 1.55;
+  font-feature-settings: 'ss01';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body.is-idle,
+body.is-idle * {
+  cursor: none !important;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* A centred 16:9 frame. Backgrounds stay full-bleed on body. */
+.stage {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: 192rem;
+  height: 108rem;
+}
+
+.w {
+  display: inline-block;
+}
+
+.ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

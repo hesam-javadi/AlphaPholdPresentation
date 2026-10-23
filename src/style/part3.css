@@ -1,0 +1,531 @@
+/* Part three: Structure Module, training and evaluation. Same tokens; text never below 2rem. */
+
+.h-list-sm {
+  gap: 1rem;
+}
+
+.h-list-sm .h-item {
+  padding: 1.1rem 2rem;
+}
+
+.h-list-sm .h-item h3 {
+  font-size: 3rem;
+}
+
+.h-list-sm .h-item p {
+  font-size: 2.6rem;
+}
+
+.n-list {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.2rem;
+  padding: 0;
+  list-style: none;
+}
+
+.n-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.6rem;
+  font-size: 2.8rem;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.n-list li > b {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  margin-top: 0.2rem;
+  border-radius: 50%;
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: #fff;
+  background: var(--blue);
+}
+
+.n-bul {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1.4rem;
+  padding-inline-start: 3rem;
+  font-size: 2.8rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--steel);
+}
+
+.c-blue {
+  color: var(--blue) !important;
+}
+
+.c-ember {
+  color: #d9541e !important;
+}
+
+.c-green {
+  color: #1d8a4a !important;
+}
+
+.pin-plain {
+  font-size: 2.4rem;
+}
+
+.pin-node-l {
+  font-size: 3.6rem;
+  background: none;
+}
+
+.pin-num-badge {
+  display: grid;
+  place-items: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: 50%;
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: #fff;
+  background: var(--blue);
+  box-shadow: 0 0.6rem 1.4rem -0.6rem rgb(11 31 58 / 0.6);
+}
+
+.pin-score {
+  min-width: 34rem;
+  gap: 0.6rem;
+}
+
+.pin-score .bar {
+  display: block;
+  height: 1.6rem;
+  border-radius: 1rem;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.pin-score .bar b {
+  display: block;
+  height: 100%;
+  border-radius: 1rem;
+  background: linear-gradient(to left, var(--blue), var(--sky));
+  transition: width 0.2s;
+}
+
+.pin-file {
+  padding: 1.4rem 2rem;
+  border-radius: 1.4rem;
+  font-size: 2.4rem;
+  font-weight: 800;
+  background: var(--glass);
+  box-shadow: 0 1rem 2.6rem -1.4rem rgb(11 31 58 / 0.5);
+}
+
+.pin-file pre {
+  margin: 0.8rem 0 0;
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: 2rem;
+  font-weight: 650;
+  line-height: 1.45;
+  color: var(--steel);
+}
+
+.pin-sym {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.6rem 1.6rem;
+  border-radius: 1rem;
+  font-size: 3rem;
+  background: rgb(255 255 255 / 0.88);
+}
+
+.pin-sym small {
+  font-size: 2.1rem;
+  font-weight: 650;
+  color: var(--steel);
+}
+
+.pin-sym i {
+  font-style: normal;
+  font-size: 2.2rem;
+  font-weight: 750;
+}
+
+.c-pred {
+  color: #2f6fe4;
+}
+
+.c-ref {
+  color: #1d8a4a;
+}
+
+.pin-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  max-width: 46rem;
+  padding: 1.6rem 2.2rem;
+  border-radius: 1.6rem;
+  font-size: 2.6rem;
+  font-weight: 800;
+  text-align: center;
+  white-space: normal;
+  background: var(--glass);
+  box-shadow: 0 1.2rem 3rem -1.6rem rgb(11 31 58 / 0.5);
+}
+
+.pin-card small {
+  font-size: 2.1rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.clamp-chart {
+  width: 36rem;
+  overflow: visible;
+}
+
+.clamp-chart .ax {
+  stroke: var(--steel);
+  stroke-width: 2;
+}
+
+.clamp-chart .pen {
+  fill: none;
+  stroke: var(--alarm);
+  stroke-width: 5;
+  stroke-linejoin: round;
+}
+
+.clamp-chart .raw {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 3;
+  stroke-dasharray: 8 6;
+}
+
+.clamp-chart .mark {
+  stroke: var(--muted);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+}
+
+.clamp-chart .t {
+  font-family: 'Vazirmatn Variable', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  fill: var(--steel);
+  text-anchor: middle;
+}
+
+.clamp-chart .s {
+  text-anchor: start;
+}
+
+.pin-count {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pin-count b {
+  font-size: 6rem;
+  font-weight: 900;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.pin-count small {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--steel);
+}
+
+.pin-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pin-stack small {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.pin-hot14 {
+  font-weight: 900;
+  color: var(--ink);
+}
+
+.cs-legend {
+  display: flex;
+  gap: 2.4rem;
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: var(--steel);
+}
+
+.cs-legend span,
+.pin-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.cs-legend i,
+.pin-legend i {
+  display: inline-block;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 0.4rem;
+}
+
+.pin-legend {
+  display: flex;
+  gap: 3rem;
+  padding: 0.8rem 2rem;
+  border-radius: 10rem;
+  font-size: 2.4rem;
+  font-weight: 750;
+  background: rgb(255 255 255 / 0.9);
+}
+
+.pin-gdt {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  padding: 0.4rem 1.8rem;
+  border-radius: 10rem;
+  color: #fff;
+  background: var(--ink);
+}
+
+.pin-gdt b {
+  font-size: 3.6rem;
+  font-weight: 900;
+}
+
+.pin-gdt small {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--sky);
+}
+
+.pin-key {
+  padding: 0.5rem 1.6rem;
+  border-inline-start: 0.6rem solid var(--k);
+  border-radius: 0.4rem 1rem 1rem 0.4rem;
+  font-size: 2.5rem;
+  font-weight: 650;
+  background: var(--glass);
+}
+
+.pin-key b {
+  font-size: 3.2rem;
+  font-weight: 900;
+}
+
+.k-blue {
+  --k: var(--blue);
+}
+
+.k-sky {
+  --k: var(--sky);
+}
+
+.k-grey {
+  --k: #b7c2cf;
+}
+
+.k-ember {
+  --k: var(--ember);
+}
+
+.pin-stat.k-blue {
+  border-inline-start-color: var(--blue);
+}
+
+.pin-stat.k-ember {
+  border-inline-start-color: var(--ember);
+}
+
+.pin-big-stat b {
+  font-size: 4.2rem;
+}
+
+.pin-gdtcard p {
+  font-size: 3.4rem;
+}
+
+.pin-gdtcard p b {
+  font-size: 4.4rem;
+  font-weight: 900;
+}
+
+.g-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.6rem;
+  height: 18rem;
+}
+
+.g-bar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 5.4rem;
+  height: 100%;
+}
+
+.g-bar i {
+  display: block;
+  width: 100%;
+  border-radius: 0.6rem 0.6rem 0 0;
+  background: linear-gradient(to top, var(--blue), var(--sky));
+}
+
+.g-bar b {
+  position: absolute;
+  top: -0.4rem;
+  font-size: 2.2rem;
+  font-weight: 900;
+}
+
+.g-bar span {
+  margin-top: 0.6rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--steel);
+  direction: ltr;
+}
+
+.r-table {
+  width: 100%;
+  margin-top: 1.4rem;
+  border-collapse: separate;
+  border-spacing: 0 0.6rem;
+  font-size: 2.6rem;
+}
+
+.r-table th {
+  padding: 1rem 1.8rem;
+  font-weight: 850;
+  text-align: right;
+  color: #fff;
+  background: #2f7d46;
+}
+
+.r-table th:first-child,
+.r-table td:first-child {
+  border-radius: 0 1rem 1rem 0;
+}
+
+.r-table th:last-child,
+.r-table td:last-child {
+  border-radius: 1rem 0 0 1rem;
+  white-space: nowrap;
+}
+
+.r-table td {
+  padding: 0.9rem 1.8rem;
+  font-weight: 650;
+  line-height: 1.4;
+  background: var(--glass);
+  transition:
+    background 0.4s,
+    color 0.4s;
+}
+
+.r-table td:last-child {
+  font-weight: 850;
+}
+
+.r-table tr.is-hot td {
+  color: #fff;
+  background: #2f7d46;
+}
+
+.pl-scale {
+  display: flex;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 1rem 2.4rem -1.4rem rgb(11 31 58 / 0.5);
+}
+
+.pl-scale span {
+  padding: 0.6rem 2rem;
+  font-size: 2.3rem;
+  font-weight: 800;
+  color: #fff;
+  background: var(--c);
+}
+
+.pl-scale span:nth-child(1),
+.pl-scale span:nth-child(2) {
+  color: var(--ink);
+}
+
+.pin-vert {
+  writing-mode: vertical-rl;
+}
+
+.op-lead {
+  margin-top: 1.2rem;
+  font-size: 2.8rem;
+}
+
+.op-steps .n-stage p {
+  display: block !important;
+  font-size: 2.6rem;
+  color: var(--ink);
+}
+
+.ds-lead {
+  margin-top: 1rem;
+  font-size: 2.9rem;
+}
+
+.ds-sublead {
+  margin-top: 1rem;
+  font-size: 2.8rem;
+  font-weight: 750;
+}
+
+.ds-steps li {
+  font-size: 2.6rem;
+}
+
+.rc-legend {
+  position: absolute;
+  right: 12rem;
+  top: 62rem;
+  font-size: 2.3rem;
+}
+
+.fa-def {
+  margin: 1.4rem 0 0.4rem;
+  font-size: 3rem;
+}
+
+.pin.rtl {
+  direction: rtl;
+  unicode-bidi: isolate;
+}
+
+.cv-name {
+  font-size: 5rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+.s-closing .cv-credits {
+  top: 72rem;
+}

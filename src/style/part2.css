@@ -1,0 +1,1192 @@
+/* Part two: homology, alignments and the AlphaFold network.
+   Same tokens as theme.css; text never below 2.2rem for the projector. */
+
+/* ===== Pins: labels that sit on 3D points ===================================================== */
+
+.pins {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.pin {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  font-size: 2.4rem;
+  font-weight: 750;
+  line-height: 1.3;
+  color: var(--ink);
+  unicode-bidi: plaintext;
+}
+
+.pin-tex {
+  padding: 0.1rem 0.8rem;
+  border-radius: 0.8rem;
+  font-size: 2.6rem;
+  background: rgb(255 255 255 / 0.82);
+}
+
+.pin-dim {
+  font-size: 3.2rem;
+  background: none;
+}
+
+.pin-small {
+  font-size: 2.1rem;
+  color: var(--steel);
+  background: none;
+}
+
+.pin-node {
+  font-size: 2.6rem;
+  color: #fff;
+  background: none;
+}
+
+.pin-call {
+  padding: 0.3rem 1.2rem;
+  border: 0.25rem solid var(--gold);
+  background: #fff8d6;
+}
+
+.pin-term {
+  padding: 0.3rem 1.4rem;
+  border-radius: 10rem;
+  font-size: 2.3rem;
+  font-weight: 800;
+  background: #fff;
+  box-shadow: 0 0.6rem 1.6rem -0.8rem rgb(11 31 58 / 0.45);
+}
+
+.pin-flag {
+  padding: 0.5rem 1.5rem;
+  border-radius: 1rem;
+  font-size: 2.3rem;
+  font-weight: 800;
+  color: #fff;
+  background: var(--ink);
+}
+
+.pin-flag.pin-alarm {
+  background: var(--alarm);
+}
+
+.pin-big {
+  font-size: 4.2rem;
+}
+
+.pin-theta {
+  display: grid;
+  place-items: center;
+  width: 4.6rem;
+  height: 4.6rem;
+  border-radius: 50%;
+  font-size: 2.6rem;
+  color: #fff;
+  background: #6c4fd1;
+  box-shadow: 0 0.5rem 1.2rem -0.6rem rgb(11 31 58 / 0.6);
+}
+
+.pin-word {
+  padding: 0.2rem 1rem;
+  border-radius: 0.7rem;
+  font-size: 2.3rem;
+  font-weight: 750;
+  color: var(--steel);
+  background: rgb(255 255 255 / 0.8);
+}
+
+.pin-num {
+  font-size: 2.3rem;
+  font-weight: 850;
+  color: var(--steel);
+}
+
+.pin-seq {
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--steel);
+}
+
+.pin-track {
+  padding: 0.2rem 1.6rem;
+  border: 0.3rem solid currentColor;
+  border-radius: 10rem;
+  font-size: 2.6rem;
+  font-weight: 900;
+  background: #fff;
+}
+
+.pin-col-i {
+  color: #1f8fc2;
+}
+
+.pin-col-j {
+  color: #d9541e;
+}
+
+/* Colours shared by formulas, pins and 3D props. */
+.c-seq {
+  color: var(--blue);
+}
+
+.c-evo {
+  color: #d9541e;
+}
+
+.c-tpl {
+  color: #1f8fc2;
+}
+
+.c-out {
+  color: var(--ink);
+}
+
+.c-pair {
+  color: #2f7fc0;
+}
+
+/* ===== Lens: from a box on the figure to the panel that opens it up ========================== */
+
+.lens {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.lens-edges {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 2;
+  stroke-dasharray: 7 7;
+  opacity: 0.6;
+}
+
+.lens-panel {
+  fill: rgb(255 255 255 / 0.32);
+  stroke: rgb(0 83 214 / 0.35);
+  stroke-width: 2;
+}
+
+.lens-box {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 3;
+}
+
+/* ===== Formulas =============================================================================== */
+
+.tex {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.tex .katex {
+  font-size: 1.08em;
+}
+
+.katex-display {
+  margin: 0;
+}
+
+/* ===== Network chapter layout ================================================================= */
+
+.s-ch2 .ch-title {
+  font-size: 11.5rem;
+}
+
+.n-panel {
+  position: absolute;
+  top: 9.5rem;
+  right: 12rem;
+  width: 76rem;
+}
+
+.n-panel.n-wide {
+  width: 168rem;
+}
+
+.n-title {
+  margin-top: 0.2rem;
+  font-size: 5.2rem;
+  font-weight: 900;
+  line-height: 1.3;
+}
+
+.n-title-sm {
+  font-size: 4.4rem;
+}
+
+.n-kick {
+  margin-inline-start: 1.2rem;
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--steel);
+}
+
+.n-sub2 {
+  margin-top: 0.2rem;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--steel);
+}
+
+.swap {
+  display: grid;
+  margin-top: 2rem;
+}
+
+.swap > * {
+  grid-area: 1 / 1;
+}
+
+.n-body {
+  font-size: 3.1rem;
+  font-weight: 560;
+  line-height: 1.6;
+  color: var(--steel);
+}
+
+.n-body + .n-body {
+  margin-top: 1.4rem;
+}
+
+.n-strong {
+  font-size: 3.4rem;
+  font-weight: 750;
+  color: var(--ink);
+}
+
+.n-sub {
+  margin: 0.4rem 0 1rem;
+  font-size: 3.6rem;
+  font-weight: 850;
+  line-height: 1.35;
+}
+
+.n-sub b {
+  color: var(--blue);
+}
+
+.n-latin {
+  font-size: 0.78em;
+  color: var(--blue);
+}
+
+.n-tex {
+  margin: 1.6rem 0;
+  font-size: 3.4rem;
+  text-align: center;
+  color: var(--ink);
+}
+
+.n-tex-big {
+  margin: 3rem 0;
+  font-size: 4.8rem;
+}
+
+.n-terms {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.n-terms li {
+  display: flex;
+  align-items: baseline;
+  gap: 1.6rem;
+  font-size: 2.8rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--steel);
+}
+
+.n-terms li > .tex {
+  flex: none;
+  min-width: 8rem;
+  font-size: 3.1rem;
+  text-align: center;
+  color: var(--ink);
+}
+
+.n-terms-sm li {
+  font-size: 2.6rem;
+}
+
+.n-qkv li > .tex {
+  min-width: 5.6rem;
+  padding: 0.2rem 0;
+  border-radius: 1rem;
+  background: var(--c);
+}
+
+.n-qkv li b {
+  color: var(--ink);
+}
+
+.n-concept {
+  position: absolute;
+  top: 9rem;
+  left: 8rem;
+  width: 96rem;
+  height: 45rem;
+}
+
+.n-formula {
+  position: absolute;
+  top: 1.6rem;
+  left: 0;
+  right: 4rem;
+  font-size: 2.6rem;
+  text-align: center;
+  color: var(--ink);
+}
+
+.n-formula.n-big {
+  top: 3rem;
+  font-size: 5.6rem;
+}
+
+.n-arrow {
+  position: absolute;
+  top: 21rem;
+  left: 70rem;
+  font-size: 6rem;
+  font-weight: 300;
+  color: var(--steel);
+}
+
+/* Architecture: the four stages. */
+.n-stages {
+  display: grid;
+  gap: 1.1rem;
+  margin-top: 1.8rem;
+  padding: 0;
+  list-style: none;
+}
+
+.n-stage {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.8rem;
+  padding: 1.1rem 2rem 1.2rem;
+  border-inline-start: 0.7rem solid var(--c);
+  border-radius: 0.4rem 1.6rem 1.6rem 0.4rem;
+  background: var(--glass);
+  transition:
+    background 0.4s,
+    box-shadow 0.4s;
+}
+
+.n-stage > * {
+  transition: opacity 0.4s;
+}
+
+.n-stage:not(.is-active) > * {
+  opacity: 0.5;
+}
+
+.n-stage.is-active {
+  background: #fff;
+  box-shadow: 0 1.2rem 3rem -1.6rem rgb(11 31 58 / 0.5);
+}
+
+.n-stage > b {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: 50%;
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: #fff;
+  background: var(--c);
+}
+
+.n-stage h3 {
+  font-size: 3rem;
+  font-weight: 850;
+  line-height: 1.35;
+}
+
+.n-stage p {
+  font-size: 2.5rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--steel);
+}
+
+.n-stage em {
+  display: inline-block;
+  margin-top: 0.6rem;
+  padding: 0.1rem 1.2rem;
+  border-radius: 10rem;
+  font-size: 2.3rem;
+  font-style: normal;
+  font-weight: 800;
+  color: var(--blue);
+  background: #e6efff;
+}
+
+
+.n-pairs {
+  display: flex;
+  gap: 1.6rem;
+  margin: 1.4rem 0 1.8rem;
+  padding: 0;
+  list-style: none;
+}
+
+.n-pairs li {
+  padding: 0.3rem 1.8rem;
+  border-radius: 10rem;
+  font-size: 2.8rem;
+  font-weight: 750;
+  background: #fff;
+  box-shadow: 0 0.6rem 1.6rem -0.9rem rgb(11 31 58 / 0.45);
+}
+
+.n-kind {
+  margin-top: 1.4rem;
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: var(--blue);
+}
+
+.pin-fn {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 0.3rem 1.8rem 0.3rem 1.2rem;
+  border-radius: 1rem;
+  font-size: 2.3rem;
+  font-weight: 800;
+  color: #fff;
+  background: var(--ink);
+}
+
+.pin-fn .tex {
+  font-size: 3.2rem;
+  color: var(--sun);
+}
+
+.pin-formula {
+  font-size: 3rem;
+}
+
+.n-stage:not(.is-active) p,
+.n-stage:not(.is-active) em {
+  display: none;
+}
+
+.swap-tight {
+  margin-top: 0;
+}
+
+.n-panel .n-note {
+  margin-top: 2.2rem;
+}
+
+.n-panel .n-note span {
+  font-size: 3rem;
+}
+
+/* ===== 1-4 Homologs =========================================================================== */
+
+.braces {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.braces path {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.brace-labels {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.brace-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.h-fig {
+  position: absolute;
+  top: 4.2rem;
+  left: 10rem;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #a0302f;
+}
+
+.h-panel {
+  width: 74rem;
+}
+
+.h-latin {
+  font-size: 3rem;
+  font-weight: 750;
+  text-align: right;
+  color: var(--blue);
+}
+
+.h-list {
+  display: grid;
+  gap: 1.8rem;
+  margin-top: 1.4rem;
+  padding: 0;
+  list-style: none;
+}
+
+.h-item {
+  padding: 1.6rem 2.4rem;
+  border-inline-start: 0.7rem solid var(--blue);
+  border-radius: 0.4rem 1.6rem 1.6rem 0.4rem;
+  background: var(--glass);
+}
+
+.h-item h3 {
+  font-size: 3.4rem;
+  font-weight: 850;
+  line-height: 1.35;
+}
+
+.h-item h3 .ltr {
+  font-size: 0.8em;
+  color: var(--blue);
+}
+
+.h-item p {
+  margin-top: 0.6rem;
+  font-size: 2.9rem;
+  font-weight: 560;
+  line-height: 1.55;
+  color: var(--steel);
+}
+
+.g-a {
+  font-style: normal;
+  font-weight: 900;
+  color: var(--blue);
+}
+
+.g-b {
+  font-style: normal;
+  font-weight: 900;
+  color: #e0612f;
+}
+
+.pin-leaf {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.pin-gene {
+  padding: 0.2rem 1.2rem;
+  border-radius: 0.8rem;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  background: rgb(255 255 255 / 0.85);
+}
+
+.pin-dup {
+  padding: 0.2rem 1.2rem;
+  border: 0.3rem solid var(--alarm);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--alarm);
+  background: #fff;
+}
+
+.pin-stat {
+  display: flex;
+  flex-direction: column;
+  padding: 0.8rem 1.8rem;
+  border-inline-start: 0.6rem solid var(--gold);
+  border-radius: 0.4rem 1.2rem 1.2rem 0.4rem;
+  font-size: 2.8rem;
+  font-weight: 750;
+  background: var(--glass);
+  box-shadow: 0 1rem 2.6rem -1.4rem rgb(11 31 58 / 0.5);
+}
+
+.pin-stat b {
+  font-weight: 900;
+  color: var(--ink);
+}
+
+.pin-stat small {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.s-in .n-panel {
+  width: 84rem;
+}
+
+.s-in .n-title-sm {
+  font-size: 4.1rem;
+}
+
+.s-attn .n-panel {
+  width: 82rem;
+}
+
+.n-qkv li {
+  font-size: 2.6rem;
+}
+
+.n-panel .n-note span {
+  font-size: 2.8rem;
+}
+
+/* Chapter openers now carry longer contents lists. */
+.ch-block {
+  top: 18rem;
+}
+
+.toc {
+  gap: 1.1rem;
+}
+
+.toc li {
+  font-size: 3.4rem;
+}
+
+/* ===== 1-5 Bioinformatics tools and MSA ======================================================= */
+
+.tools {
+  display: grid;
+  gap: 1.1rem;
+  margin-top: 1.2rem;
+  padding: 0;
+  list-style: none;
+}
+
+.tool {
+  display: flex;
+  align-items: baseline;
+  gap: 2rem;
+  padding: 1.2rem 2.2rem;
+  border-inline-start: 0.7rem solid var(--line);
+  border-radius: 0.4rem 1.6rem 1.6rem 0.4rem;
+  background: var(--glass);
+  transition:
+    background 0.4s,
+    border-color 0.4s,
+    box-shadow 0.4s;
+}
+
+.tool > * {
+  transition: opacity 0.4s;
+}
+
+.tool:not(.is-active) > * {
+  opacity: 0.55;
+}
+
+.tool.is-active {
+  border-color: var(--blue);
+  background: #fff;
+  box-shadow: 0 1.2rem 3rem -1.6rem rgb(11 31 58 / 0.5);
+}
+
+.tool b {
+  flex: none;
+  min-width: 15rem;
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: 2.8rem;
+  font-weight: 850;
+  color: var(--blue);
+}
+
+.tool span {
+  font-size: 2.7rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.m-big {
+  font-size: 13rem;
+  font-weight: 900;
+  line-height: 1;
+  text-align: right;
+  letter-spacing: 0.02em;
+}
+
+.m-expand {
+  margin-top: 0.6rem;
+  font-size: 3.8rem;
+  font-weight: 750;
+  text-align: right;
+  color: var(--blue);
+}
+
+.m-fa {
+  margin: 0.4rem 0 2.4rem;
+  font-size: 4.2rem;
+  font-weight: 850;
+}
+
+.h-item-b {
+  border-inline-start-color: #8b5cf6;
+}
+
+.pin-hit {
+  padding: 0.2rem 1.2rem;
+  border-radius: 0.8rem;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2.3rem;
+  font-weight: 700;
+  background: rgb(255 255 255 / 0.9);
+}
+
+.pin-hit b {
+  font-family: 'Vazirmatn Variable', sans-serif;
+  color: var(--blue);
+}
+
+.pin-round {
+  padding: 0.2rem 1.2rem;
+  border-radius: 10rem;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #fff;
+  background: var(--steel);
+}
+
+.pin-row {
+  font-size: 2.3rem;
+}
+
+.pin-view {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.pin-hot {
+  color: #1fae5b;
+}
+
+.pin-ion {
+  font-size: 2.6rem;
+  font-weight: 800;
+}
+
+/* ===== 1-6 Concepts ============================================================================ */
+
+.c-cards {
+  display: grid;
+  gap: 1.4rem;
+  margin-top: 2.2rem;
+}
+
+.c-card {
+  padding: 1.6rem 2.4rem;
+  border-inline-start: 0.7rem solid var(--steel);
+  border-radius: 0.4rem 1.6rem 1.6rem 0.4rem;
+  background: var(--glass);
+  transition:
+    background 0.4s,
+    box-shadow 0.4s;
+}
+
+.c-card-green {
+  border-inline-start-color: #1fae5b;
+  background: rgb(232 250 239 / 0.9);
+}
+
+.c-card h3 {
+  font-size: 3.3rem;
+  font-weight: 850;
+  line-height: 1.35;
+}
+
+.c-card p {
+  margin-top: 0.4rem;
+  font-size: 2.8rem;
+  font-weight: 560;
+  line-height: 1.5;
+  color: var(--steel);
+}
+
+.c-card small {
+  display: block;
+  font-size: 2.3rem;
+  font-weight: 800;
+}
+
+.c-k0 {
+  border-inline-start-color: #2f6fe4;
+}
+
+.c-k0 small {
+  color: #2f6fe4;
+}
+
+.c-k1 {
+  border-inline-start-color: #f07a1a;
+}
+
+.c-k1 small {
+  color: #f07a1a;
+}
+
+.c-k2 {
+  border-inline-start-color: #1fae5b;
+}
+
+.c-k2 small {
+  color: #1fae5b;
+}
+
+.s-coevo .c-card > * {
+  transition: opacity 0.4s;
+}
+
+.s-coevo .c-card:not(.is-active) > p {
+  display: none;
+}
+
+.s-coevo .c-card.is-active {
+  background: #fff;
+  box-shadow: 0 1.2rem 3rem -1.6rem rgb(11 31 58 / 0.5);
+}
+
+.c-conclusion {
+  position: absolute;
+  left: 8rem;
+  right: 12rem;
+  bottom: 9rem;
+  padding: 2rem 3.6rem;
+  border-radius: 1.8rem;
+  font-size: 3.4rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #fff;
+  background: var(--ink);
+}
+
+.c-conclusion b {
+  font-weight: 900;
+  color: var(--sun);
+}
+
+.c-analysis {
+  color: var(--ink);
+  background: #eaf6ff;
+  border: 0.3rem solid #9fd3f5;
+}
+
+.c-analysis b {
+  color: var(--blue);
+}
+
+.pin-note {
+  font-size: 2.1rem;
+  color: var(--muted);
+}
+
+.pin-pos {
+  font-size: 2.3rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.pin-charge {
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: var(--ink);
+}
+
+.pin-res {
+  padding: 0.2rem 1.2rem;
+  border-radius: 0.8rem;
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: 2.6rem;
+  font-weight: 850;
+  background: #fff;
+  box-shadow: 0 0.6rem 1.6rem -0.9rem rgb(11 31 58 / 0.45);
+}
+
+.pin-xyz {
+  padding: 0.2rem 1rem;
+  border-radius: 0.6rem;
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: rgb(255 255 255 / 0.85);
+}
+
+.p-lead {
+  margin-bottom: 1rem;
+}
+
+/* More scenes: a finer progress chain, and captions that wrap before reaching it. */
+.progress {
+  gap: 1rem;
+}
+
+.pg-bead {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.pg-bead.is-current {
+  width: 2.6rem;
+  height: 2.6rem;
+}
+
+.pg-bead.is-chapter {
+  margin-inline-start: 2.2rem;
+}
+
+.caption {
+  max-width: 44rem;
+}
+
+.caption figcaption span {
+  text-align: left;
+}
+
+.n-latin.blk {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 3rem;
+  text-align: right;
+}
+
+.c-view {
+  position: absolute;
+  top: 9rem;
+  left: 8rem;
+  margin: 0;
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+body[data-scene='conserved'] .pin-seq,
+body[data-scene='coevolution'] .pin-seq {
+  font-size: 2.4rem;
+}
+
+.pin-charge {
+  font-size: 3.2rem;
+}
+
+.h-item h3 .ltr {
+  display: block;
+  margin-top: 0.2rem;
+  text-align: right;
+}
+
+body[data-scene='msa'] .pin-row {
+  font-size: 2.3rem;
+}
+
+.s-tri .n-panel,
+.s-om .n-panel {
+  width: 78rem;
+}
+
+.s-om .n-terms {
+  gap: 0.3rem;
+}
+
+.s-om .n-terms li {
+  font-size: 2.3rem;
+  line-height: 1.4;
+}
+
+.s-om .n-tex {
+  margin: 0.4rem 0;
+}
+
+.s-om .n-title,
+.s-attn .n-title {
+  font-size: 4.6rem;
+}
+
+.s-om .swap,
+.s-attn .swap {
+  margin-top: 1.2rem;
+}
+
+.s-attn .n-tex {
+  margin: 0.4rem 0;
+  font-size: 3rem;
+}
+
+.s-attn .n-body {
+  font-size: 2.8rem;
+}
+
+.s-attn .n-tex-big {
+  margin: 1.6rem 0;
+  font-size: 4.2rem;
+}
+
+.s-attn .n-qkv {
+  gap: 0.5rem;
+}
+
+.s-attn .n-qkv li {
+  font-size: 2.4rem;
+  line-height: 1.35;
+}
+
+.s-attn .n-qkv li > .tex {
+  min-width: 4.4rem;
+  padding: 0;
+  font-size: 2.6rem;
+}
+
+.s-attn .n-body {
+  line-height: 1.45;
+}
+
+body[data-scene='net-opm'][data-step='3'] .om-schem {
+  display: none;
+}
+
+.s-tri .n-title {
+  font-size: 4rem;
+}
+
+.s-tri .n-body,
+.s-om .n-body {
+  font-size: 2.9rem;
+}
+
+.s-tri .n-strong {
+  font-size: 3.1rem;
+}
+
+.pin-node .katex {
+  font-size: 1.3em;
+}
+
+.s-rc .n-panel {
+  width: 82rem;
+}
+
+.s-rc .n-body {
+  font-size: 2.9rem;
+}
+
+.s-rc .n-strong {
+  font-size: 3.1rem;
+}
+
+.pin-gap {
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #8a9bb0;
+}
+
+.c-conclusion {
+  font-size: 3.1rem;
+}
+
+/* ===== Cover =================================================================================== */
+
+.cv-credits {
+  position: absolute;
+  top: 71rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+.cv-by {
+  padding-top: 2.2rem;
+  border-top: 0.3rem solid var(--line);
+  font-size: 4.4rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.cv-row {
+  display: flex;
+  align-items: center;
+  gap: 2.4rem;
+  font-size: 3.4rem;
+  font-weight: 650;
+  color: var(--steel);
+}
+
+.cv-row i {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 50%;
+  background: var(--sky);
+}
+
+/* The talk now has 45 scenes: a finer chain, anchored at the reading start (right). */
+.progress {
+  left: auto;
+  right: 12rem;
+  translate: 0 0;
+  gap: 0.75rem;
+}
+
+.pg-bead {
+  width: 1.2rem;
+  height: 1.2rem;
+  box-shadow: inset 0 0 0 0.25rem var(--c);
+}
+
+.pg-bead.is-current {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.pg-bead.is-current::after {
+  inset: -0.6rem;
+}
+
+.pg-bead.is-chapter {
+  margin-inline-start: 1.8rem;
+}
