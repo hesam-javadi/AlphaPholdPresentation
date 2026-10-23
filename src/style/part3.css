@@ -223,7 +223,12 @@
 }
 
 .clamp-chart .s {
+  direction: ltr;
   text-anchor: start;
+}
+
+.fa-card {
+  max-width: 42rem;
 }
 
 .pin-count {

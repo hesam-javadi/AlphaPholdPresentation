@@ -37,7 +37,7 @@ function panel(num: string, title: string, body: string, cls = '') {
 }
 
 export function structureScenes(ctx: Ctx): Scene[] {
-  const { world, chrome, overlay, pins } = ctx;
+  const { world, chrome, overlay, pins, notes } = ctx;
   const head = { num: chapter2.num, title: chapter2.title };
 
   // =========================================================================================
@@ -426,7 +426,7 @@ export function structureScenes(ctx: Ctx): Scene[] {
   zij.char(0, '·');
   zij.color(0, '#ffd21f');
   Object.assign(zij.t[0], { ...at(42, 18, 6) });
-  const ipaBox = hidden(labelledBox('IPA', 20, 9, 4), 1);
+  const ipaBox = hidden(labelledBox('IPA', 20, 9, 4, '#16294a', 300), 1);
   ipaBox.position.copy(at(42, 90, 4));
   const ipLinks = new Links();
   ip.root.add(pair, featI.group, featJ.group, zij.group, ipaBox, ipLinks.group);
@@ -665,8 +665,9 @@ export function structureScenes(ctx: Ctx): Scene[] {
   });
   const caOf = (i: number) => () => prot3.localToWorld(new THREE.Vector3().fromArray(ch.ca, i * 3).sub(ctr));
   const HL_TXT = ['زنجیره‌ی جانبی بلند و باردار', 'بدون زنجیره‌ی جانبی', 'حلقه‌ی آروماتیک'];
+  const HL_IDS = HL.map((_, k) => `sc-h${k}`);
   HL.forEach((i, k) =>
-    pins.add(`sc-h${k}`, { anchor: caOf(i), html: `<span>${aminoAcidFa[ch.seq[i]]} <i class="ltr">${ch.seq[i]}${i + 1}</i></span><small>${HL_TXT[k]}</small>`, cls: 'pin-stat', align: 'left', dx: [26, 30, 24][k] - 0, dy: [-8, 0, 8][k] }),
+    notes.add(HL_IDS[k], { anchor: caOf(i), html: `<b>${aminoAcidFa[ch.seq[i]]} <i class="ltr">${ch.seq[i]}${i + 1}</i></b><span>${HL_TXT[k]}</span>`, at: [60, 24 + k * 15], tone: 'sun' }),
   );
   // A few lines of the output: element, residue and coordinates (Å).
   const sample = atoms.filter((a) => a.r === 5).slice(0, 7);
@@ -693,11 +694,11 @@ export function structureScenes(ctx: Ctx): Scene[] {
       grow(prot3, true, 0.4);
       gsap.to(grown, { all: 0, duration: 0.6, overwrite: 'auto' });
       gsap.fromTo(grown, { hl: 0 }, { hl: 1, duration: 1.4, delay: 1.2 });
-      pins.show(['sc-h0', 'sc-h1', 'sc-h2'], true, 2, 0.2);
+      HL_IDS.forEach((id, k) => notes.show(id, true, 2 + k * 0.2));
       pins.show('sc-out', false);
     },
     () => {
-      pins.show(['sc-h0', 'sc-h1', 'sc-h2'], false);
+      notes.hide(...HL_IDS);
       gsap.to(grown, { all: 1, duration: 3.2, delay: 0.3, ease: 'power1.inOut', overwrite: 'auto' });
       pins.show('sc-out', true, 3.2);
     },
@@ -706,6 +707,7 @@ export function structureScenes(ctx: Ctx): Scene[] {
     grow(prot3, false);
     gsap.to(grown, { all: 0, hl: 0, duration: 0.4 });
     pins.hide('sc-');
+    notes.hide(...HL_IDS);
   });
   const sSc: Scene = {
     id: 'net-sidechain',

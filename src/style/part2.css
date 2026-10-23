@@ -44,6 +44,7 @@
   font-size: 2.6rem;
   color: #fff;
   background: none;
+  text-shadow: 0 0 0.5rem rgb(11 31 58 / 0.9), 0 0.1rem 0.2rem rgb(11 31 58 / 0.7);
 }
 
 .pin-call {
@@ -1089,6 +1090,22 @@ body[data-scene='net-opm'][data-step='3'] .om-schem {
 
 .s-tri .n-title {
   font-size: 4rem;
+}
+
+.s-tri .swap {
+  margin-top: 1.2rem;
+}
+
+.s-tri .swap-tight {
+  margin-top: 0;
+}
+
+.s-tri .n-sub {
+  margin: 0.2rem 0 0.4rem;
+}
+
+.s-tri .n-body + .n-body {
+  margin-top: 0.8rem;
 }
 
 .s-tri .n-body,

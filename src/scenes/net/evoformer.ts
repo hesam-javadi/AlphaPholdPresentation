@@ -119,13 +119,13 @@ export function netEvoScenes(ctx: Ctx, net: Net): Scene[] {
   const wp = (v: THREE.Vector3) => root.localToWorld(v);
 
   const qkv = new Tiles(TOK * 3);
-  qkv.unit = 6;
+  qkv.unit = 7;
   for (let i = 0; i < TOK; i++)
     for (let k = 0; k < 3; k++) {
       const n = i * 3 + k;
       const p = tokPos(i);
       qkv.char(n, 'QKV'[k]).color(n, QKV_COL[k]);
-      Object.assign(qkv.t[n], { x: p.x, y: p.y + 8.5 + k * 6.2, z: p.z });
+      Object.assign(qkv.t[n], { x: p.x, y: p.y + 9 + k * 7.4, z: p.z });
     }
   const heat = new Tiles(TOK * TOK, { size: 0.9, depth: 0.4 });
   heat.unit = 5.2;
@@ -143,7 +143,7 @@ export function netEvoScenes(ctx: Ctx, net: Net): Scene[] {
       heat.color(n, new THREE.Color('#eef4fb').lerp(C.blue, Math.min(1, rowsW[r][c] * 2.2)));
     }
   const flyV = new Tiles(TOK);
-  flyV.unit = 6;
+  flyV.unit = 7;
   for (let i = 0; i < TOK; i++) flyV.char(i, 'V').color(i, QKV_COL[2]);
   const yTile = new Tiles(1);
   yTile.unit = 8;
@@ -492,7 +492,7 @@ export function netEvoScenes(ctx: Ctx, net: Net): Scene[] {
     .add('tr-h', { anchor: () => root.localToWorld(ffPos(1, FHID - 1).add(new THREE.Vector3(0, -4.4, 0))), html: 'شبکه‌ی پیش‌خور، تبدیل غیرخطی', cls: 'pin-word', align: 'below' })
     .add('tr-y', { anchor: () => root.localToWorld(ffPos(2, FIN - 1).add(new THREE.Vector3(0, -4.4, 0))), html: 'نمایش به‌روزشده', cls: 'pin-word', align: 'below' })
     .add('tr-res', { anchor: () => root.localToWorld(plusNode.position.clone().add(new THREE.Vector3(0, -4.4, 0))), html: tex('x + f(x)'), cls: 'pin-tex pin-call', align: 'below' })
-    .add('tr-skip', { anchor: () => root.localToWorld(ffPos(1, 0).add(new THREE.Vector3(0, 9, 0))), html: '<b class="ltr">residual connection</b>', cls: 'pin-flag', align: 'above' });
+    .add('tr-skip', { anchor: () => root.localToWorld(ffPos(1, 0).add(new THREE.Vector3(0, 7, 0))), html: '<b class="ltr">residual connection</b>', cls: 'pin-flag', align: 'above' });
 
   const elTr = section(
     overlay,
@@ -546,7 +546,7 @@ export function netEvoScenes(ctx: Ctx, net: Net): Scene[] {
       net.dock('dock');
       board.focus(['transM', 'transP']);
       board.flow(false);
-      lensOn(['transM'], [8, 9, 96, 45]);
+      lensOn(['transM'], [8, 5, 96, 49]);
       showFF(true, 0.6);
       showRes(false);
       pins.show(['tr-x', 'tr-h', 'tr-y'], true, 1.4, 0.2);
@@ -556,7 +556,7 @@ export function netEvoScenes(ctx: Ctx, net: Net): Scene[] {
       net.dock('dock');
       board.focus([...RESIDUALS, ...PLUS], { dim: 0.6 });
       board.flow(true, RESIDUALS);
-      lensOn(['transM'], [8, 9, 96, 45]);
+      lensOn(['transM'], [8, 5, 96, 49]);
       showFF(true);
       showRes(true);
       pins.show(['tr-x', 'tr-h', 'tr-y'], true);
@@ -613,7 +613,7 @@ export function netEvoScenes(ctx: Ctx, net: Net): Scene[] {
   const D = 4;
   const om = new Tiles(S * OC);
   om.unit = 6.2;
-  const omOrigin = at(20, 31, 4);
+  const omOrigin = at(25, 31, 4);
   const omPos = (r: number, c: number) => new THREE.Vector3(omOrigin.x + (c - (OC - 1) / 2) * 6, omOrigin.y - (r - (S - 1) / 2) * 6, omOrigin.z);
   const omRows = ['MKLCATQ', 'MRLCGSQ', 'IKVSATE', 'MRLCGTQ', 'LKICASE'];
   omRows.forEach((row, r) =>
@@ -810,7 +810,7 @@ export function netEvoScenes(ctx: Ctx, net: Net): Scene[] {
   const nodes = new THREE.Group();
   const nodeMeshes: Record<string, THREE.Mesh> = {};
   for (const [id, p] of Object.entries(NODE)) {
-    const m = new THREE.Mesh(new THREE.SphereGeometry(3.4, 32, 20), new THREE.MeshPhysicalMaterial({ color: NODE_COL[id], roughness: 0.28, clearcoat: 1 }));
+    const m = new THREE.Mesh(new THREE.SphereGeometry(4.2, 32, 20), new THREE.MeshPhysicalMaterial({ color: NODE_COL[id], roughness: 0.28, clearcoat: 1 }));
     m.position.copy(p);
     m.scale.setScalar(0.001);
     m.visible = false;

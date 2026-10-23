@@ -349,7 +349,7 @@ export function trainingScenes(ctx: Ctx): Scene[] {
     return { t, q };
   });
   const protF = hidden(new THREE.Group(), 2.2);
-  protF.position.copy(at(32, 54, 0));
+  protF.position.copy(at(27, 55, 0));
   protF.rotation.set(0.2, 0.3, 0);
   const truePl = new FramePlates(NRES, { size: 1.7, color: (_i, o) => o.set('#2fb36b') });
   TRUE.forEach((f, i) => {
@@ -438,13 +438,13 @@ export function trainingScenes(ctx: Ctx): Scene[] {
       <line x1="140" y1="125" x2="140" y2="30" class="mark"/>
       <text x="140" y="143" class="t">${fa(10)} Å</text>
       <text x="245" y="143" class="t">فاصله</text>
-      <text x="36" y="20" class="t s">جریمه</text>
+      <text x="38" y="20" class="t s">جریمه</text>
     </svg>`;
   pins
     .add('fa-true', { anchor: () => protF.localToWorld(TRUE[5].t.clone()), html: 'ساختار واقعی', cls: 'pin-word c-green', align: 'right', dx: -3 })
     .add('fa-pred', { anchor: () => protF.localToWorld(PRED[60].t.clone().applyMatrix4(predG.matrix)), html: 'پیش‌بینی', cls: 'pin-word c-blue', align: 'left', dx: 3 })
     .add('fa-val', { anchor: () => fa6.wp(at(72, 84, 0)), html: '', cls: 'pin-stat', align: 'center' })
-    .add('fa-clamp', { anchor: () => fa6.wp(at(76, 34, 0)), html: `<b>تابع جریمه‌ی محدودشده</b>${clampSvg}<small>خطاهای بزرگ‌تر از سقف، جریمه‌ی بیشتری نمی‌گیرند</small>`, cls: 'pin-card', align: 'center' });
+    .add('fa-clamp', { anchor: () => fa6.wp(at(79, 31, 0)), html: `<b>تابع جریمه‌ی محدودشده</b>${clampSvg}<small>خطاهای بزرگ‌تر از سقف، جریمه‌ی بیشتری نمی‌گیرند</small>`, cls: 'pin-card fa-card', align: 'center' });
   const elFa = section(
     overlay,
     's-net s-fape',
@@ -554,8 +554,8 @@ export function trainingScenes(ctx: Ctx): Scene[] {
       wp.setXYZ(i, x, h(x, z) + 0.12, z);
     }
   }
-  const landG = hidden(new THREE.Group(), 0.92);
-  landG.position.copy(at(50, 58, 0));
+  const landG = hidden(new THREE.Group(), 1.08);
+  landG.position.copy(at(50, 63, 0));
   landG.rotation.set(0.62, -0.5, 0);
   // Gradient descent with momentum from a poor start.
   const path: THREE.Vector3[] = [];
@@ -611,7 +611,7 @@ export function trainingScenes(ctx: Ctx): Scene[] {
     pins.html('op-loss', `${tex('\\mathcal{L}')} = ${fa(((p.y - hMin) / (hMax - hMin)).toFixed(2)).replace('.', '٫')}`);
   });
   pins
-    .add('op-start', { anchor: () => landG.localToWorld(path[0].clone().add(new THREE.Vector3(0, 6, 0))), html: 'پارامترهای اولیه', cls: 'pin-word', align: 'above' })
+    .add('op-start', { anchor: () => landG.localToWorld(path[0].clone().add(new THREE.Vector3(0, 9, 0))), html: 'پارامترهای اولیه', cls: 'pin-word', align: 'above' })
     .add('op-loss', { anchor: () => ball.getWorldPosition(new THREE.Vector3()), html: '', cls: 'pin-tex pin-call', align: 'left', dx: 3 })
     .add('op-min', { anchor: () => landG.localToWorld(path[path.length - 1].clone().add(new THREE.Vector3(0, 2, 0))), html: 'کمینه‌ی زیان', cls: 'pin-flag', align: 'below', dy: 3 })
     .add('op-axis', { anchor: () => op.wp(at(40, 98, 0)), html: 'سطح زیان روی فضای پارامترها (نمایشی)', cls: 'pin-word', align: 'center' });
@@ -739,9 +739,9 @@ export function trainingScenes(ctx: Ctx): Scene[] {
   const pdb = new THREE.InstancedMesh(new THREE.BoxGeometry(1.8, 1.8, 1.8), new THREE.MeshStandardMaterial({ color: '#2fb36b', roughness: 0.4 }), pdbN);
   pdb.frustumCulled = false;
   const pdbHome = Array.from({ length: pdbN }, () => sph(P.pdb, 8));
-  const teacher = hidden(labelledBox('مدل آموزش‌دیده', 26, 11, 5, '#16294a', 200), 1);
+  const teacher = hidden(labelledBox('مدل آموزش‌دیده', 32, 11, 5, '#16294a', 200), 1);
   teacher.position.copy(P.teacher);
-  const finalM = hidden(labelledBox('مدل نهایی', 26, 11, 5, '#1d6b45', 230), 1);
+  const finalM = hidden(labelledBox('مدل نهایی', 32, 11, 5, '#1d6b45', 230), 1);
   finalM.position.copy(P.final);
   const gate = hidden(new THREE.Group(), 1);
   gate.position.copy(P.gate);

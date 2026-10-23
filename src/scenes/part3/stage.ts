@@ -79,7 +79,16 @@ export function labelTexture(text: string, o: { w?: number; h?: number; size?: n
   cv.height = o.h ?? 256;
   const g = cv.getContext('2d')!;
   g.fillStyle = o.color ?? '#ffffff';
-  g.font = `${o.weight ?? 800} ${o.size ?? 110}px ${o.font ?? '"Vazirmatn Variable", sans-serif'}`;
+  let size = o.size ?? 110;
+  const font = () => `${o.weight ?? 800} ${size}px ${o.font ?? '"Vazirmatn Variable", sans-serif'}`;
+  g.font = font();
+  // Long labels shrink to fit the plate instead of running off its edges.
+  const room = cv.width * 0.92;
+  const w = g.measureText(text).width;
+  if (w > room) {
+    size = Math.floor((size * room) / w);
+    g.font = font();
+  }
   g.textAlign = 'center';
   g.textBaseline = 'middle';
   g.direction = 'rtl';

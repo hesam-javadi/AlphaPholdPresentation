@@ -168,7 +168,7 @@ export function routesScenes(ctx: Ctx): Scene[] {
       html: `<b>۱. ${routes.experimental.name}</b>${routes.experimental.methods
         .map((x, i) => `<span>${x} <i class="ltr">(${routes.experimental.latin[i]})</i></span>`)
         .join('')}`,
-      at: [104, 31],
+      at: [104, 27],
       tone: 'ink',
     })
     .add('r-ai', {

@@ -68,7 +68,7 @@ function compare(ref: THREE.Vector3[], mod: THREE.Vector3[], pairs: [number, num
 }
 
 export function evaluationScenes(ctx: Ctx): Scene[] {
-  const { world, chrome, overlay, pins } = ctx;
+  const { world, chrome, overlay, pins, notes } = ctx;
   const head = { num: chapter4.num, title: chapter4.title };
   const pf = (v: number, d = 1) => fa(v.toFixed(d)).replace('.', '٫');
 
@@ -583,8 +583,8 @@ export function evaluationScenes(ctx: Ctx): Scene[] {
   });
   const gdtBars = R.gdtCut.map((v, i) => `<div class="g-bar"><i style="height:${(v * 100).toFixed(0)}%"></i><b>${fa(Math.round(v * 100))}٪</b><span>≤ ${fa([1, 2, 4, 8][i])} Å</span></div>`).join('');
   pins
-    .add('mt-gdt', { anchor: () => mt.wp(at(86, 62, 0)), html: `<div class="g-bars">${gdtBars}</div><p>GDT_TS ≈ <b>${pf(R.gdt)}</b></p>`, cls: 'pin-card pin-gdtcard', align: 'center' })
-    .add('mt-shell', { anchor: () => mtG.localToWorld(caA[RES].clone().add(new THREE.Vector3(8, 0, 0))), html: 'آستانه‌های ۱، ۲، ۴ و ۸ آنگستروم', cls: 'pin-word', align: 'left', dx: 1 })
+    .add('mt-gdt', { anchor: () => mt.wp(at(88, 62, 0)), html: `<div class="g-bars">${gdtBars}</div><p>GDT_TS ≈ <b>${pf(R.gdt)}</b></p>`, cls: 'pin-card pin-gdtcard', align: 'center' })
+    .add('mt-shell', { anchor: () => mtG.localToWorld(caA[RES].clone().add(new THREE.Vector3(0, 15, 0))), html: 'آستانه‌های ۱، ۲، ۴ و ۸ آنگستروم', cls: 'pin-word', align: 'above', dy: -0.6 })
     .add('mt-rmsd', { anchor: () => mt.wp(at(84, 86, 0)), html: `<b>RMSD ≈ ${pf(R.rmsd, 2)} Å</b><small>روی ${fa(PAIRS.length)} جفت Cα هم‌تراز</small>`, cls: 'pin-stat pin-big-stat ltr-mix', align: 'center' })
     .add('mt-lddt', { anchor: () => mt.wp(at(84, 86, 0)), html: `<b>lDDT ≈ ${pf(R.lddt)}</b><small>با جابه‌جایی کل مدل تغییر نمی‌کند</small>`, cls: 'pin-stat pin-big-stat ltr-mix', align: 'center' })
     .add('mt-sphere', { anchor: () => mtG.localToWorld(caA[RES].clone().add(new THREE.Vector3(0, 15, 0))), html: 'همسایه‌های تا ۱۵ آنگستروم', cls: 'pin-word', align: 'above' })
@@ -770,9 +770,18 @@ export function evaluationScenes(ctx: Ctx): Scene[] {
     .add('cf-axis', { anchor: () => heat.localToWorld(new THREE.Vector3(0, -PS / 2 - 1, 0)), html: 'باقی‌مانده‌ی هم‌ترازشده', cls: 'pin-word', align: 'below' })
     .add('cf-axis2', { anchor: () => heat.localToWorld(new THREE.Vector3(PS / 2 + 1, 0, 0)), html: 'باقی‌مانده‌ی ارزیابی‌شده', cls: 'pin-word pin-vert', align: 'left' })
     .add('cf-heat', { anchor: () => heat.localToWorld(new THREE.Vector3(0, PS / 2 + 1, 0)), html: 'نقشه‌ی PAE (نمایشی)<small>سبز تیره: خطای کم — سفید: خطای زیاد</small>', cls: 'pin-stat', align: 'above' })
-    .add('cf-lobes', { anchor: () => heat.localToWorld(new THREE.Vector3(0, -PS / 2 - 1, 0)), html: 'جای نسبی دو دامنه: نامطمئن', cls: 'pin-flag pin-alarm', align: 'below', dy: 5 })
-    .add('cf-n', { anchor: () => lobeN.mesh.localToWorld(new THREE.Vector3().fromArray(cam.chains[0].ca, 20 * 3)), html: 'دامنه‌ی ۱', cls: 'pin-word', align: 'right', dx: -3 })
-    .add('cf-c', { anchor: () => lobeC.mesh.localToWorld(new THREE.Vector3().fromArray(cam.chains[0].ca, 120 * 3)), html: 'دامنه‌ی ۲', cls: 'pin-word', align: 'left', dx: 3 });
+    .add('cf-lobes', { anchor: () => heat.localToWorld(new THREE.Vector3(0, -PS / 2 - 1, 0)), html: 'جای نسبی دو دامنه: نامطمئن', cls: 'pin-flag pin-alarm', align: 'below', dy: 5 });
+  const lobeMid = (from: number, to: number) => {
+    const v = new THREE.Vector3();
+    for (let i = from; i < to; i++) v.add(new THREE.Vector3().fromArray(cam.chains[0].ca, i * 3));
+    return v.multiplyScalar(1 / (to - from));
+  };
+  const midN = lobeMid(0, HINGE);
+  const midC = lobeMid(HINGE, nC);
+  notes
+    .add('cf-n', { anchor: () => lobeN.mesh.localToWorld(midN.clone()), html: '<b>دامنه‌ی ۱</b>', at: [12, 28], tone: 'blue' })
+    .add('cf-c', { anchor: () => lobeC.mesh.localToWorld(midC.clone()), html: '<b>دامنه‌ی ۲</b>', at: [40, 76], tone: 'blue' });
+  const domains = (on: boolean, delay = 0) => ['cf-n', 'cf-c'].forEach((id, k) => notes.show(id, on, delay + k * 0.15));
   const cfItem = (it: typeof confidence.plddt, s: string, from: number) => /* html */ `
       <div data-s="${s}">
         <h3 class="n-sub"><b>${it.num}</b> <span class="ltr">${it.name}</span></h3>
@@ -792,7 +801,8 @@ export function evaluationScenes(ctx: Ctx): Scene[] {
       grow(camG, false);
       grow(heat, false);
       pins.show('cf-scale', true, 1.2);
-      pins.show(['cf-hi', 'cf-lo', 'cf-axis', 'cf-axis2', 'cf-heat', 'cf-lobes', 'cf-n', 'cf-c'], false);
+      pins.show(['cf-hi', 'cf-lo', 'cf-axis', 'cf-axis2', 'cf-heat', 'cf-lobes'], false);
+      domains(false);
     },
     () => {
       cfTl?.kill();
@@ -808,7 +818,8 @@ export function evaluationScenes(ctx: Ctx): Scene[] {
       grow(heat, true, 0.6);
       gsap.to([blockA.material, blockB.material], { opacity: 0, duration: 0.3 });
       pins.show(['cf-hi', 'cf-lo', 'cf-lobes'], false);
-      pins.show(['cf-scale', 'cf-axis', 'cf-axis2', 'cf-heat', 'cf-n', 'cf-c'], true, 1, 0.1);
+      pins.show(['cf-scale', 'cf-axis', 'cf-axis2', 'cf-heat'], true, 1, 0.1);
+      domains(true, 1.4);
     },
     () => {
       gsap.to([blockA.material, blockB.material], { opacity: 1, duration: 0.6, delay: 0.3 });
@@ -821,6 +832,7 @@ export function evaluationScenes(ctx: Ctx): Scene[] {
     cfTl?.kill();
     [p53G, camG, heat].forEach((o) => grow(o, false));
     pins.hide('cf-');
+    domains(false);
   });
   const sCf: Scene = {
     id: 'confidence',
