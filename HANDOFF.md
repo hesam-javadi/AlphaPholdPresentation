@@ -28,7 +28,10 @@ This is a **Persian (RTL), light-mode, web-based presentation about AlphaFold**,
 npm install
 npm run dev          # http://localhost:5173  (config "presentation" in .claude/launch.json)
 npm run build        # tsc --noEmit && vite build  — must pass with no errors
+npm run build:offline  # dist-offline/index.html: ONE self-contained file (4 MB) that opens from disk
 ```
+
+**Running it on another computer:** run `npm run build:offline` and copy `dist-offline/index.html` (rename it freely, e.g. `AlphaFold.html`). Double-click it to open it in Chrome or Edge; no server, internet, Node or install is needed. Fonts, images, molecule data, JS and CSS are all inlined; `tools/inline.mjs` folds the Vite build into the one file. (The normal `dist/` build needs a web server, because browsers block module scripts loaded from `file://`.)
 
 **Controls:**
 - Space, PageDown, → or ↓: next step. PageUp, ← or ↑: back.
@@ -129,6 +132,8 @@ Code for scenes 30–45 is in `src/scenes/part3/` (structure.ts, training.ts, ev
    - 39 self-distillation: «مدل آموزش‌دیده» ran off its box. The boxes are wider, and `labelTexture()` now shrinks any label that is wider than its plate;
    - 43 metrics: the 1/2/4/8 Å label ran into the GDT card (it now sits above the protein);
    - 44 confidence: the two domain labels collided on the rotating calmodulin. They are now leader-line notes above and below the protein.
+
+   Afterwards, two more fixes were requested and verified: **31 frames** was hard to read (a rainbow tangle of plates and a tiny frame). It now has one calm colour for all residues with the marked residue in yellow; an enlarged residue showing its N, Cα and C atoms, bonds and labelled x/y/z axes; a scramble-then-correct loop in step 2 (misplaced frames glow ember and turn blue once corrected); and, in step 3, residue 40, a solid distance bar and larger global axes. **38.6 optimisation** used momentum, so the ball swung back and forth and stopped in a shallow side valley while the label said «کمینه‌ی زیان». It is now plain gradient descent (every update goes downhill) into the global minimum, resampled for a steady roll; the loss read-out is clamped to 0–1.
 
    `npm run build` passes (chunk-size note only). `node tools/stepcheck.mjs http://localhost:5173/` (forward through all 140 steps, back again, every step by `goto`, then 120 random jumps) reports no runtime errors. The only console message is a 404 for `/favicon.ico`.
 6. Known data caveats, already disclosed to the user:

@@ -228,31 +228,67 @@ export function structureScenes(ctx: Ctx): Scene[] {
   const RI = 11;
   const RJ = 39;
   const prot2 = hidden(new THREE.Group(), 2);
-  prot2.position.copy(at(28, 56, 0));
-  const plates2 = new FramePlates(NRES, { size: 1.7 });
-  plates2.color(RI, '#ffd21f');
-  plates2.color(RJ, '#ffd21f');
-  const trace2 = new Trace(NRES, 0.3);
+  prot2.position.copy(at(26, 56, 0));
+  // One calm colour for every residue's triangle, so the two marked residues stand out.
+  const PALE = new THREE.Color('#5f97d8');
+  const plates2 = new FramePlates(NRES, { size: 1.35, color: (_i, out) => out.copy(PALE) });
+  const MARK = [RI, RJ];
+  // Residue RJ is marked only when its distance to RI is measured (step 3).
+  let markJ = false;
+  const paintPlates = (err: number) => {
+    const c = PALE.clone().lerp(C.ember, Math.min(1, err * 1.6));
+    for (let i = 0; i < NRES; i++) plates2.mesh.setColorAt(i, i === RI || (markJ && i === RJ) ? C.sun : c);
+    plates2.mesh.instanceColor!.needsUpdate = true;
+  };
+  paintPlates(0);
+  plates2.scale[RI] = 1.7;
+  const trace2 = new Trace(NRES, 0.22, new THREE.MeshStandardMaterial({ color: '#9aaabd', roughness: 0.6 }));
   trace2.set(TRUE.map((f) => f.t));
-  const smallAxes = axesGizmo(3.2, 0.18);
-  smallAxes.position.copy(TRUE[RI].t);
-  smallAxes.quaternion.copy(TRUE[RI].q);
-  const pairLine = new THREE.Line(
-    new THREE.BufferGeometry().setFromPoints([TRUE[RI].t, TRUE[RJ].t]),
-    new THREE.LineDashedMaterial({ color: '#0b1f3a', dashSize: 0.8, gapSize: 0.5, transparent: true, opacity: 0 }),
-  );
-  pairLine.computeLineDistances();
-  prot2.add(plates2.mesh, trace2.mesh, smallAxes, pairLine);
+  // The two marked Cα atoms and the distance between them (step 3).
+  const markMat = new THREE.MeshStandardMaterial({ color: '#d99a00', roughness: 0.35, transparent: true, opacity: 0 });
+  const marks = MARK.map((i) => {
+    const m = new THREE.Mesh(new THREE.SphereGeometry(0.9, 20, 14), markMat);
+    m.position.copy(TRUE[i].t);
+    return m;
+  });
+  const span = TRUE[RJ].t.clone().sub(TRUE[RI].t);
+  const pairLine = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, span.length(), 10), new THREE.MeshStandardMaterial({ color: '#0b1f3a', transparent: true, opacity: 0 }));
+  pairLine.position.copy(TRUE[RI].t).addScaledVector(span, 0.5);
+  pairLine.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), span.clone().normalize());
+  prot2.add(plates2.mesh, trace2.mesh, pairLine, ...marks);
   const pose2 = TRUE.map(copyFrame);
-  // The giant frame: one residue blown up, with its own axes.
-  const big = hidden(new THREE.Group(), 7);
-  big.position.copy(at(66, 30, 10));
-  big.rotation.set(0.35, -0.5, 0.1);
-  const bigPlate = new FramePlates(1, { size: 1.7, color: (_i, out) => out.set('#ffd21f') });
+  // The giant frame: residue RI blown up — its three backbone atoms, the triangle they span,
+  // and the local axes x (toward C), y (toward N, in the plane) and z (out of the plane).
+  const big = hidden(new THREE.Group(), 15);
+  big.position.copy(at(62, 30, 10));
+  big.rotation.set(-0.45, 0.55, 0.05);
+  const bigPlate = new FramePlates(1, { size: 1, color: (_i, out) => out.set('#ffd21f') });
   bigPlate.update();
-  big.add(bigPlate.mesh, axesGizmo(2.6, 0.08));
-  const worldAxes = hidden(axesGizmo(9, 0.45), 1);
-  worldAxes.position.copy(at(90, 82, 0));
+  const bigPlateMat = bigPlate.mesh.material as THREE.MeshPhysicalMaterial;
+  bigPlateMat.transparent = true;
+  bigPlateMat.opacity = 0.55;
+  bigPlateMat.depthWrite = false;
+  const ATOM: [THREE.Vector3, string][] = [
+    [LOCAL.n, '#3a5bd9'],
+    [LOCAL.ca, '#34465e'],
+    [LOCAL.c, '#8a97a8'],
+  ];
+  const bonds = new THREE.MeshStandardMaterial({ color: '#56657a', roughness: 0.45 });
+  ATOM.forEach(([p, col]) => {
+    const a = new THREE.Mesh(new THREE.SphereGeometry(0.24, 24, 16), new THREE.MeshStandardMaterial({ color: col, roughness: 0.3 }));
+    a.position.copy(p);
+    big.add(a);
+  });
+  [LOCAL.n, LOCAL.c].forEach((p) => {
+    const b = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, p.length(), 10), bonds);
+    b.position.copy(p).multiplyScalar(0.5);
+    b.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), p.clone().normalize());
+    big.add(b);
+  });
+  const AX = 2.4;
+  big.add(bigPlate.mesh, axesGizmo(AX, 0.055));
+  const worldAxes = hidden(axesGizmo(10, 0.5), 1.7);
+  worldAxes.position.copy(at(86, 80, 0));
   worldAxes.rotation.set(0.35, -0.6, 0);
   const frLinks = new Links();
   fr.root.add(prot2, big, worldAxes, frLinks.group);
@@ -260,6 +296,7 @@ export function structureScenes(ctx: Ctx): Scene[] {
   const r2 = rng(3);
   const offs = TRUE.map(() => ({ t: new THREE.Vector3(r2() - 0.5, r2() - 0.5, r2() - 0.5).multiplyScalar(7), q: new THREE.Quaternion().setFromEuler(new THREE.Euler((r2() - 0.5) * 1.6, (r2() - 0.5) * 1.6, (r2() - 0.5) * 1.6)) }));
   const spin = { a: 0 };
+  let painted = 0;
   world.onFrame(() => {
     if (!prot2.visible) return;
     const k = corr.k;
@@ -270,6 +307,8 @@ export function structureScenes(ctx: Ctx): Scene[] {
       plates2.pose[i].q.copy(pose2[i].q);
     }
     plates2.update();
+    // Misplaced frames glow ember; corrected ones return to blue.
+    if (Math.abs(painted - (1 - k)) > 0.01) paintPlates((painted = 1 - k));
     prot2.rotation.set(0.15, spin.a, 0);
     if (spin.a !== 0 || pins.el('fr-xyz')?.style.visibility === 'visible') {
       const p = TRUE[RI].t.clone().applyEuler(prot2.rotation);
@@ -278,15 +317,25 @@ export function structureScenes(ctx: Ctx): Scene[] {
     }
   });
   const dist = TRUE[RI].t.distanceTo(TRUE[RJ].t);
+  const tip = (v: THREE.Vector3) => () => big.localToWorld(v.clone().multiplyScalar(AX + 0.55));
   pins
-    .add('fr-n', { anchor: () => big.localToWorld(LOCAL.n.clone()), html: 'N', cls: 'pin-res', align: 'above', dy: -1 })
-    .add('fr-ca', { anchor: () => big.localToWorld(LOCAL.ca.clone()), html: 'Cα', cls: 'pin-res', align: 'below', dy: 1.2 })
-    .add('fr-c', { anchor: () => big.localToWorld(LOCAL.c.clone()), html: 'C', cls: 'pin-res', align: 'below', dy: 1.2 })
-    .add('fr-local', { anchor: () => big.localToWorld(new THREE.Vector3(0.6, 2.8, 0)), html: 'دستگاه مختصات محلی<small>جایگاه + جهت</small>', cls: 'pin-stat', align: 'left', dx: 2 })
+    .add('fr-n', { anchor: () => big.localToWorld(LOCAL.n.clone()), html: 'N', cls: 'pin-res', align: 'left', dx: 1.4 })
+    .add('fr-ca', { anchor: () => big.localToWorld(LOCAL.ca.clone()), html: 'Cα', cls: 'pin-res', align: 'below', dy: 1.6 })
+    .add('fr-c', { anchor: () => big.localToWorld(LOCAL.c.clone()), html: 'C', cls: 'pin-res', align: 'below', dy: 1.6 })
+    .add('fr-x', { anchor: tip(new THREE.Vector3(1, 0, 0)), html: tex('x'), cls: 'pin-tex', align: 'center' })
+    .add('fr-y', { anchor: tip(new THREE.Vector3(0, 1, 0)), html: tex('y'), cls: 'pin-tex', align: 'center' })
+    .add('fr-z', { anchor: tip(new THREE.Vector3(0, 0, 1)), html: tex('z'), cls: 'pin-tex', align: 'center' })
+    .add('fr-local', { anchor: () => fr.wp(at(70, 58, 0)), html: `دستگاه مختصات محلی باقی‌مانده‌ی ${fa(RI + 1)}<small>مبدأ: Cα — جهت: محورهای x، y، z</small>`, cls: 'pin-stat', align: 'center' })
     .add('fr-fix', { anchor: () => fr.wp(prot2.position), html: 'شبکه چارچوب‌ها را اصلاح می‌کند', cls: 'pin-flag', align: 'below', dy: 21 })
     .add('fr-world', { anchor: () => fr.wp(worldAxes.position), html: 'دستگاه مختصات کلی', cls: 'pin-word', align: 'right', dx: -3 })
-    .add('fr-xyz', { anchor: () => fr.wp(at(66, 66, 0)), html: '', cls: 'pin-stat pin-xyz-live', align: 'center' })
-    .add('fr-dist', { anchor: () => prot2.localToWorld(TRUE[RI].t.clone().lerp(TRUE[RJ].t, 0.5)), html: `<span>فاصله‌ی Cα<sub>${fa(RI + 1)}</sub> تا Cα<sub>${fa(RJ + 1)}</sub>: ${fa(dist.toFixed(1)).replace('.', '٫')} Å</span><small>روابط داخلی: ثابت</small>`, cls: 'pin-stat', align: 'left', dx: 22 });
+    .add('fr-xyz', { anchor: () => fr.wp(at(66, 72, 0)), html: '', cls: 'pin-stat pin-xyz-live', align: 'center' })
+    .add('fr-dist', { anchor: () => fr.wp(at(66, 58, 0)), html: `<span>فاصله‌ی Cα<sub>${fa(RI + 1)}</sub> تا Cα<sub>${fa(RJ + 1)}</sub>: ${fa(dist.toFixed(1)).replace('.', '٫')} Å</span><small>روابط داخلی: ثابت</small>`, cls: 'pin-stat', align: 'center' });
+  const setMarkJ = (on: boolean) => {
+    markJ = on;
+    plates2.scale[RJ] = on ? 1.7 : 1;
+    paintPlates(painted);
+  };
+  const FRAME_PINS = ['fr-n', 'fr-ca', 'fr-c', 'fr-x', 'fr-y', 'fr-z'];
 
   const elFr = section(
     overlay,
@@ -311,31 +360,36 @@ export function structureScenes(ctx: Ctx): Scene[] {
       grow(prot2, true, 0.4);
       grow(big, true, 0.9);
       grow(worldAxes, false);
-      gsap.to(pairLine.material, { opacity: 0, duration: 0.3 });
+      setMarkJ(false);
+      gsap.to([pairLine.material, markMat], { opacity: 0, duration: 0.3 });
       frLinks
-        .set([{ a: TRUE[RI].t.clone().multiplyScalar(2).add(prot2.position), b: big.position.clone().add(new THREE.Vector3(4, -3, 0)), w: 0.6, bend: new THREE.Vector3(0, 10, 4), color: '#d99a00', arrow: true, r: 0.24 }])
+        .set([{ a: TRUE[RI].t.clone().multiplyScalar(2).add(prot2.position), b: big.position.clone().add(new THREE.Vector3(-8, -6, 0)), w: 0.6, bend: new THREE.Vector3(0, 10, 4), color: '#d99a00', arrow: true, r: 0.24 }])
         .show(true, { delay: 1.4 });
-      pins.show(['fr-n', 'fr-ca', 'fr-c', 'fr-local'], true, 1.6, 0.12);
+      pins.show([...FRAME_PINS, 'fr-local'], true, 1.6, 0.1);
       pins.show(['fr-fix', 'fr-world', 'fr-xyz', 'fr-dist'], false);
     },
     () => {
       spinTw?.kill();
       gsap.to(spin, { a: 0, duration: 0.8 });
       grow(worldAxes, false);
-      gsap.to(pairLine.material, { opacity: 0, duration: 0.3 });
+      setMarkJ(false);
+      gsap.to([pairLine.material, markMat], { opacity: 0, duration: 0.3 });
       pins.show(['fr-world', 'fr-xyz', 'fr-dist'], false);
+      pins.show([...FRAME_PINS, 'fr-local'], true);
+      // Scramble, then let the network settle every frame back into place — again and again.
       corrTl?.kill();
-      corrTl = gsap.timeline({ delay: 0.4, repeat: 1, repeatDelay: 0.8 });
-      corrTl.set(corr, { k: 0 }).to(corr, { k: 1, duration: 2.6, ease: 'power2.inOut' });
+      corrTl = gsap.timeline({ delay: 0.4, repeat: -1, repeatDelay: 1.6 });
+      corrTl.to(corr, { k: 0, duration: 0.6, ease: 'power2.out' }).to(corr, { k: 1, duration: 2.8, ease: 'power2.inOut' }, '+=0.8');
       pins.show('fr-fix', true, 0.6);
     },
     () => {
       corrTl?.kill();
       gsap.to(corr, { k: 1, duration: 0.5 });
-      pins.show('fr-fix', false);
+      pins.show(['fr-fix', 'fr-local'], false);
       grow(worldAxes, true, 0.3);
-      gsap.to(pairLine.material, { opacity: 0.9, duration: 0.6, delay: 0.5 });
-      pins.show(['fr-world', 'fr-xyz', 'fr-dist'], true, 0.8, 0.2);
+      setMarkJ(true);
+      gsap.to([pairLine.material, markMat], { opacity: 0.95, duration: 0.6, delay: 0.5 });
+      pins.show(['fr-world', 'fr-dist', 'fr-xyz'], true, 0.8, 0.2);
       spinTw?.kill();
       spin.a = 0;
       spinTw = gsap.to(spin, { a: Math.PI * 2, duration: 12, delay: 1, ease: 'none', repeat: -1 });

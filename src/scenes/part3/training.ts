@@ -557,22 +557,27 @@ export function trainingScenes(ctx: Ctx): Scene[] {
   const landG = hidden(new THREE.Group(), 1.08);
   landG.position.copy(at(50, 63, 0));
   landG.rotation.set(0.62, -0.5, 0);
-  // Gradient descent with momentum from a poor start.
+  // Plain gradient descent from a poor start: every update goes downhill, and the path ends
+  // in the deepest basin (the global minimum, near x = 13, z = −11).
   const path: THREE.Vector3[] = [];
   {
-    let x = -32;
-    let z = 30;
-    let vx = 0;
-    let vz = 0;
-    for (let i = 0; i < 90; i++) {
-      path.push(new THREE.Vector3(x, h(x, z), z));
+    const raw: THREE.Vector3[] = [];
+    let x = -38;
+    let z = -12;
+    for (let i = 0; i < 600; i++) {
+      raw.push(new THREE.Vector3(x, h(x, z), z));
       const e = 0.01;
       const gx = (h(x + e, z) - h(x - e, z)) / (2 * e);
       const gz = (h(x, z + e) - h(x, z - e)) / (2 * e);
-      vx = 0.82 * vx - 1.6 * gx;
-      vz = 0.82 * vz - 1.6 * gz;
-      x += vx * 0.6;
-      z += vz * 0.6;
+      if (Math.hypot(gx, gz) * 1.6 < 0.02) break;
+      x -= 1.6 * gx;
+      z -= 1.6 * gz;
+    }
+    // Even spacing along the path, so the ball rolls steadily instead of stalling on flat ground.
+    const curve = new THREE.CatmullRomCurve3(raw);
+    for (let i = 0; i < 90; i++) {
+      const p = curve.getPointAt(i / 89);
+      path.push(p.setY(h(p.x, p.z)));
     }
   }
   const ball = new THREE.Mesh(new THREE.SphereGeometry(2.2, 32, 20), new THREE.MeshPhysicalMaterial({ color: '#ffffff', roughness: 0.15, clearcoat: 1, emissive: '#ffd21f', emissiveIntensity: 0.25 }));
@@ -608,7 +613,7 @@ export function trainingScenes(ctx: Ctx): Scene[] {
     const dir = new THREE.Vector3(-gx, -(gx * gx + gz * gz), -gz).normalize();
     grad.position.copy(ball.position);
     grad.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
-    pins.html('op-loss', `${tex('\\mathcal{L}')} = ${fa(((p.y - hMin) / (hMax - hMin)).toFixed(2)).replace('.', '٫')}`);
+    pins.html('op-loss', `${tex('\\mathcal{L}')} = ${fa(Math.min(1, Math.max(0, (p.y - hMin) / (hMax - hMin))).toFixed(2)).replace('.', '٫')}`);
   });
   pins
     .add('op-start', { anchor: () => landG.localToWorld(path[0].clone().add(new THREE.Vector3(0, 9, 0))), html: 'پارامترهای اولیه', cls: 'pin-word', align: 'above' })

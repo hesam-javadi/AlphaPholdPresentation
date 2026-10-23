@@ -2,3 +2,4 @@ node_modules
 dist
 .shots
 tools/node_modules
+dist-offline
