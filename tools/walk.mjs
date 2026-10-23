@@ -17,7 +17,8 @@ const browser = await puppeteer.launch({
   executablePath: process.env.CHROME ?? 'C:/Program Files/Google/Chrome/Application/chrome.exe',
   headless: 'new',
   userDataDir: path.join(outDir, '.profile'),
-  args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--hide-scrollbars', `--window-size=${W},${H}`],
+  args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--hide-scrollbars', `--window-size=${W},${H}`,
+    ...(process.getuid?.() === 0 ? ['--no-sandbox'] : [])],
   defaultViewport: { width: W, height: H, deviceScaleFactor: 1 },
   protocolTimeout: 600000,
 });

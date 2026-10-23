@@ -1,6 +1,6 @@
 # AlphaPhold: handoff for the next agent
 
-You are taking over a nearly finished project. This file contains everything you need. You do not have the earlier chat. Read the whole file before you change anything.
+The project is **finished**: every scene was walked and checked in screenshots, the fixes are applied, the build passes and the step-through check is clean (see §5). This file contains everything you need. You do not have the earlier chat. Read the whole file before you change anything.
 
 ---
 
@@ -62,7 +62,7 @@ src/data/*.json            real structures (RCSB PDB 1UBQ,1HEW,4HHB,1CLL,1IEP,1Z
 src/assets/casp14_*.jpg    the paper's two CASP14 example overlays (cropped from PDF page 18)
 src/style/base.css         1rem = 1/108 of the 16:9 stage height (1920×1080 design frame); reset; fonts
 src/style/theme.css, part2.css, part3.css   all component and scene styles
-tools/                     walk.mjs (screenshot walker), sheet.py (contact sheets), pending_fixes.py (STAGED, NOT APPLIED)
+tools/                     walk.mjs (screenshot walker), sheet.py (contact sheets), stepcheck.mjs (runtime-error check over every step)
 ```
 
 **Patterns:**
@@ -108,31 +108,48 @@ Code for scenes 30–45 is in `src/scenes/part3/` (structure.ts, training.ts, ev
 
 1. Pages 14–20 of the PDF were built as scenes 30–45, plus the new cover and closing.
 2. The progress chain moved to the bottom right with smaller beads (45 scenes). See the end of `part2.css`.
-3. The first walkthrough review of scenes 30–45 found layout bugs. They were fixed and applied: Structure Module gas/blocks, frames layout and coordinates, IPA sizes, side-chain labels, Recycling legend, chapter numerals, FAPE panel, optimization landscape, distill gate, CASP crates and chart, results keys and rulers, metrics cards, confidence labels and scale. **These fixes have not yet been re-verified in screenshots.**
-4. A final full-deck walkthrough was started. Steps 1–72 (scenes 1–24) were reviewed. The user then asked to stop. The six fixes found in that review are written to **`tools/pending_fixes.py` but have NOT been applied**:
+3. The first walkthrough review of scenes 30–45 found layout bugs. They were fixed and applied: Structure Module gas/blocks, frames layout and coordinates, IPA sizes, side-chain labels, Recycling legend, chapter numerals, FAPE panel, optimization landscape, distill gate, CASP crates and chart, results keys and rulers, metrics cards, confidence labels and scale. They were re-verified in the final walkthrough (item 5).
+4. A review of steps 1–72 (scenes 1–24) found six fixes. They were staged in `tools/pending_fixes.py`, then applied and verified; the script has been removed (it is in the git history):
    - scene 11, routes: the camera framing put the neural net on the progress chain (`pz 212→240, oy −0.12→−0.06`);
    - scene 14, homology: the α/β superposition hero is too small (scale 1.05→1.75, and the stat pin moved);
    - scene 15, HMMER step: the "پایگاه داده" label sits on the delete states (hide `se-db`);
    - network lens panels wash out the 3D content (`.lens-panel` fill 0.32→0.1);
    - scene 20: more space between the numeral «۲» and the title;
    - scene 23: the A G L K letter tiles are small (`letters.unit` 2→2.5).
-5. Known data caveats, already disclosed to the user:
+5. **Final walkthrough (all 140 steps, 1600×900).** Every step was screenshotted and checked. Scenes 25–45 were looked at most closely. The fixes below were applied, and the affected scenes were walked again to confirm them:
+   - 11 routes: the methods card covered the cryo-EM grid after the wider framing (note moved up);
+   - 25 self-attention: larger Q K V tiles (`qkv.unit` 6→7, wider row spacing);
+   - 27 transition: the "residual connection" flag sat on the lens panel border (lens panel taller, flag lower);
+   - 28 outer product mean: the MSA and its `s` label ran out of the lens panel (MSA moved right);
+   - 29 triangle: larger residue beads, and a dark halo on the white i/j/k labels; tighter text spacing so the last line clears the board;
+   - 32 IPA: the box label was too small (font size set);
+   - 33 side chains: the three residue labels collided on the spinning protein. They are now leader-line notes in a fixed column;
+   - 37 FAPE: the clamp card covered the protein (protein left, card up and right); the y-axis label no longer sits on the axis;
+   - 38 optimisation: larger landscape; the start label no longer touches the loss read-out;
+   - 39 self-distillation: «مدل آموزش‌دیده» ran off its box. The boxes are wider, and `labelTexture()` now shrinks any label that is wider than its plate;
+   - 43 metrics: the 1/2/4/8 Å label ran into the GDT card (it now sits above the protein);
+   - 44 confidence: the two domain labels collided on the rotating calmodulin. They are now leader-line notes above and below the protein.
+
+   `npm run build` passes (chunk-size note only). `node tools/stepcheck.mjs http://localhost:5173/` (forward through all 140 steps, back again, every step by `goto`, then 120 random jumps) reports no runtime errors. The only console message is a 404 for `/favicon.ico`.
+6. Known data caveats, already disclosed to the user:
    - The AlphaFold DB (alphafold.ebi.ac.uk) was blocked from this network. The p53 and calmodulin models are AFDB **v4** taken from the AlphaFill mirror.
    - The **PAE heat map is hand-drawn (schematic)** and its caption says «نمایشی».
    - CASP history values are approximate readings from the paper's figure, and the caption says so.
 
 ---
 
-## 6. Plan to finish (do these in order)
+## 6. How to check the deck after any change
 
-1. **Apply the staged fixes:** `python tools/pending_fixes.py`. It should print done…done5 with no `MISSING` lines. Then run `npx tsc --noEmit`.
+The plan below was carried out in full (see §5). Repeat steps 2–7 after any future edit.
+
+1. *(Done.)* The staged fixes have been applied.
 2. **Start the dev server** (`npm run dev`) and leave it running. **Do not edit source files while a screenshot walk is running.** Vite hot-reloads the page and aborts the walk.
 3. **Set up the screenshot tools once:**
    ```bash
    cd tools && npm i
    pip install pillow   # for sheet.py
    ```
-   `walk.mjs` needs Google Chrome at `C:/Program Files/Google/Chrome/Application/chrome.exe`, or set the `CHROME` env var. It uses SwiftShader software WebGL. Expect about 5 s per step and about 2–3 minutes to boot.
+   `walk.mjs` needs Google Chrome at `C:/Program Files/Google/Chrome/Application/chrome.exe`, or set the `CHROME` env var (on Linux, e.g. `CHROME=/opt/pw-browsers/chromium`; it adds `--no-sandbox` when run as root). It uses SwiftShader software WebGL. Expect about 10 s per step and about 30 s to 3 minutes to boot. Two walkers on different scene ranges can run in parallel.
 4. **Walk the full deck:**
    ```bash
    node walk.mjs http://localhost:5173/ ../.shots/all 1600x900 1 999 4800
@@ -149,7 +166,7 @@ Code for scenes 30–45 is in `src/scenes/part3/` (structure.ts, training.ts, ev
 6. **Fix and re-walk only the affected scenes.** Keep each scene's own design idea; nudge positions and sizes rather than redesigning.
 7. **Finish:**
    - run `npm run build`. It must pass; a chunk-size warning is fine;
-   - make sure the stepping-through-every-step check shows no runtime errors. In dev, `window.deck` is exposed, so you can loop `deck.goto(i, s)` over all scenes and steps forward and backward while listening for `error` events;
+   - make sure the stepping-through-every-step check shows no runtime errors: `cd tools && node stepcheck.mjs http://localhost:5173/` (it uses `window.deck`, which is exposed in dev, and exits with code 1 if the page logs an error);
    - commit the work.
 
 ---
