@@ -213,7 +213,7 @@ export function routesScenes(ctx: Ctx): Scene[] {
     enter(step) {
       ctx.area('routes');
       open(el);
-      world.fly(shot(R, { py: 4, pz: 212, oy: -0.12 }), 3);
+      world.fly(shot(R, { py: 4, pz: 240, oy: -0.06 }), 3);
       world.fogTo(220, 560);
       hideTubes?.kill();
       tubeLab.visible = tubeAi.visible = true;

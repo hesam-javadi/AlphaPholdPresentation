@@ -126,7 +126,7 @@ export function homologyScenes(ctx: Ctx): Scene[] {
     h.scale.setScalar(0.001);
     root.add(h);
   });
-  const HERO = at(40, 50, 30);
+  const HERO = at(38, 48, 30);
   const spin = { y: 0 };
 
   // Sequence strips under the superposition: identical positions lit.
@@ -215,7 +215,7 @@ export function homologyScenes(ctx: Ctx): Scene[] {
     .add('ho-aG', { anchor: () => root.localToWorld(pos('aG', 1)), html: greek(F.alphaGene), cls: 'pin-gene', align: 'right', dx: -2.4 })
     .add('ho-bG', { anchor: () => root.localToWorld(pos('bG', 1)), html: greek(F.betaGene), cls: 'pin-gene', align: 'left', dx: 2.4 })
     .add('ho-stat-seq', { anchor: () => root.localToWorld(stripPos(1, 1)), html: `<span>توالی: <b>${fa(Math.round(AB.identity * 100))}٪</b> یکسان</span><small>جایگاه‌های زرد: اسید آمینه‌ی یکسان</small>`, cls: 'pin-stat', align: 'left', dx: 1.6, dy: -0.8 })
-    .add('ho-stat-3d', { anchor: () => root.localToWorld(HERO.clone().add(new THREE.Vector3(27, 12, 0))), html: `<span>ساختار: تقریباً منطبق</span><small>میانگین فاصله‌ی اتم‌های Cα: ${fa(AB.rmsd.toFixed(1)).replace('.', '٫')} آنگستروم</small>`, cls: 'pin-stat', align: 'left' })
+    .add('ho-stat-3d', { anchor: () => root.localToWorld(HERO.clone().add(new THREE.Vector3(42, 20, 0))), html: `<span>ساختار: تقریباً منطبق</span><small>میانگین فاصله‌ی اتم‌های Cα: ${fa(AB.rmsd.toFixed(1)).replace('.', '٫')} آنگستروم</small>`, cls: 'pin-stat', align: 'left' })
     .add('ho-sa', { anchor: () => root.localToWorld(stripPos(0, 0)), html: '<i class="g-a">α</i>', cls: 'pin-leaf', align: 'right', dx: -1 })
     .add('ho-sb', { anchor: () => root.localToWorld(stripPos(1, 0)), html: '<i class="g-b">β</i>', cls: 'pin-leaf', align: 'right', dx: -1 });
 
@@ -282,7 +282,7 @@ export function homologyScenes(ctx: Ctx): Scene[] {
         h.scale.setScalar(LEAF_S);
         leaf.visible = false;
         gsap.to(h.position, { x: HERO.x, y: HERO.y, z: HERO.z, duration: 1.8, delay: 0.3 + k * 0.5, ease: 'power3.inOut' });
-        gsap.to(h.scale, { x: 1.05, y: 1.05, z: 1.05, duration: 1.8, delay: 0.3 + k * 0.5, ease: 'power3.inOut' });
+        gsap.to(h.scale, { x: 1.75, y: 1.75, z: 1.75, duration: 1.8, delay: 0.3 + k * 0.5, ease: 'power3.inOut' });
       } else if (h.visible) {
         const home = leaf.userData.home as THREE.Vector3;
         gsap.to(h.position, { x: home.x, y: home.y, z: home.z, duration: 1.2, ease: 'power3.inOut' });

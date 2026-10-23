@@ -362,7 +362,7 @@ export function searchScenes(ctx: Ctx): Scene[] {
       links.show(false);
       pins.hide('se-f');
       pins.hide('se-r');
-      pins.show(['se-q', 'se-dna'], false);
+      pins.show(['se-q', 'se-dna', 'se-db'], false);
       hm.show(true, { delay: 0.4, amount: 1 });
       gsap.to(del, { s: 1, duration: 0.6, delay: 0.8, ease: 'back.out(2)' });
       const L: Parameters<Links['set']>[0] = [];

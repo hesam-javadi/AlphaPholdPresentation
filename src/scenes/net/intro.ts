@@ -53,7 +53,7 @@ export function netIntroScenes(ctx: Ctx, net: Net): Scene[] {
   let numeral: Float32Array | null = null;
   const numeralPose = () => {
     if (numeral) return numeral;
-    numeral = textPoints('۲', '900 700px "Vazirmatn Variable"', dust.count, 34, C2.clone().add(new THREE.Vector3(13, 0, 0)));
+    numeral = textPoints('۲', '900 700px "Vazirmatn Variable"', dust.count, 34, C2.clone().add(new THREE.Vector3(17, 0, 0)));
     let lo = Infinity;
     let hi = -Infinity;
     for (let i = 0; i < dust.count; i++) {
@@ -472,7 +472,7 @@ export function netIntroScenes(ctx: Ctx, net: Net): Scene[] {
     letters.char(i, ch).color(i, '#ffffff');
     letters.t[i].x = (i - 1.5) * 2.6;
   });
-  letters.unit = 2;
+  letters.unit = 2.5;
   letters.group.scale.setScalar(4.2);
   letters.group.position.copy(at(56, 18, 6));
   const feats = new Tiles(4 * 6, { size: 0.84, depth: 0.5, radius: 0.1 });
